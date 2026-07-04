@@ -3,36 +3,26 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
-// 🟢 Basic check (Render uses this to see if server is alive)
+// health check (Render uses this)
 app.get("/", (req, res) => {
     res.send("AI server is running");
 });
 
-// 🧠 CHAT ROUTE (THIS IS WHAT ROBLOX CALLS)
-app.post("/chat", async (req, res) => {
+// ✅ THIS IS THE IMPORTANT PART (ROBLOX AI ENDPOINT)
+app.post("/chat", (req, res) => {
     const message = req.body.message;
 
     if (!message) {
         return res.json({ reply: "No message received." });
     }
 
-    try {
-        // 🤖 TEMP AI (works without OpenAI first)
-        // This confirms everything is working before upgrading
-        const reply = `You said: ${message}`;
-
-        res.json({
-            reply: reply
-        });
-
-    } catch (err) {
-        res.json({
-            reply: "Server error."
-        });
-    }
+    // simple test response (we can upgrade to real AI later)
+    res.json({
+        reply: "You said: " + message
+    });
 });
 
-// 🚀 Start server
+// start server
 app.listen(3000, () => {
-    console.log("AI running on port 3000");
+    console.log("Server running on port 3000");
 });
